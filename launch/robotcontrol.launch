@@ -1,0 +1,4 @@
+<launch>
+	<node pkg ="singlerobot" type="singlerobot" name="swarmrobot" respawn="true"/>
+	
+</launch>
