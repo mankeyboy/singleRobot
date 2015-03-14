@@ -9,16 +9,22 @@ Dependencies: ROS, Gazebo, [Swarm Simulator](https://github.com/Swarm-IITKgp/swa
 
 2. Run the Swarm Simulator. [Swarm Simulator Repository should be in the system]
 	
-	'' roslaunch swarm_simulator swarm.launch ''
+```sh
+$ roslaunch swarm_simulator swarm.launch ''
+```
 
 3. Generate the launch file for the singlerobot package for n-agents
 
-    '' roscd singlerobot ''
-    '' bash generator.sh <number of agents> ''
+```sh
+roscd singlerobot
+bash generator.sh <number of agents>
+```
 
 4. Launch the singlerobot nodes.
 
-    '' roslaunch singlerobot singlerobot.launch ''  
+```sh
+roslaunch singlerobot singlerobot.launch 
+```
 
 The messages are published at /swarmbot0/message and similarly for others.
 
