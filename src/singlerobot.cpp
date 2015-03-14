@@ -11,20 +11,25 @@
 #include "singlerobot/message.h"
 #include "singlerobot/pose.h"
 #include "rosgraph_msgs/Clock.h"
+#include <string>
 
+using namespace std;
 // This file will subscribe to IR data, Obstacle Sensor data and encoder data from Simulator and then plan the path and send the global data + bot data to coverage followed by receiving data from coverage.
 //N Instances of this file will be run for each robot
 
 class swarmRobot
 {
   public:
-    std::stringstream messageTopic;
     int id;
     swarmRobot(): posX(0.0),posY(0.0),posZ(0.0)
     {
-        odomSub = n.subscribe<nav_msgs::Odometry>("/swarmbot1/odom",1000,&swarmRobot::robotCallback,this);
+    	n.getParam("ID",id);
+    	// n.getParam("NAME",botName);
+    	odomTopic << "/swarmbot" << id << "/odom";
+    	messageTopic << "/swarmbot" << id << "/message";
+        odomSub = n.subscribe<nav_msgs::Odometry>(odomTopic.str(),1000,&swarmRobot::robotCallback,this);
         clockSub = n.subscribe<rosgraph_msgs::Clock>("/clock", 1000, &swarmRobot::timeCallback, this);
-        messagePub = n.advertise<singlerobot::message>(messageTopic.str(), 1);
+        messagePub = n.advertise<singlerobot::message>(messageTopic.str(), 10);
     }
     void robotCallback(nav_msgs::Odometry msg)
     {
@@ -52,14 +57,15 @@ class swarmRobot
     }
     void run()
     {
+       ros::Rate loop_rate(5);
        messageFiller();
        messagePub.publish(msg);
+       std::cout << "Publishing" << std::endl;
        ros::spinOnce();
        loop_rate.sleep();
 
 	     // printPositions();
     }	
-    ros::Rate loop_rate;
 
   protected:
     singlerobot::message msg;
@@ -68,26 +74,17 @@ class swarmRobot
     ros::Publisher messagePub;
     rosgraph_msgs::Clock clockTime;
     ros::NodeHandle n;
+    string botName;
     double posX,posY,posZ;
-
-
-
+    std::stringstream messageTopic, odomTopic;
 };
 
 int main(int argc, char **argv)
 {
 
   ros::init(argc, argv, "singlerobot");
-      
   swarmRobot bot;
-  bot.messageTopic << "/swarmbot";
-  ros::Rate lp(5);
-  bot.loop_rate = lp;
-  bot.id = (int)(argv[1][0]-'0');
-  std::cout << "BOT ID " << bot.id << std::endl;
-  bot.messageTopic << bot.id << "/message";
   while(ros::ok())
-      bot.run();
-  
+      bot.run();  
   return 0;
 }

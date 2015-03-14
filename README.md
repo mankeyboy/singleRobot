@@ -1,7 +1,7 @@
 # Single Robot
 Description: Controls N agents by deploying the same code N times using ROS for Swarm behavior simulation.
 
-Dependencies: ROS, Gazebo, Swarm Simulator
+Dependencies: ROS, Gazebo, [Swarm Simulator](https://github.com/Swarm-IITKgp/swarm_simulator)
 
 ======Usage:======
 
@@ -11,14 +11,20 @@ Dependencies: ROS, Gazebo, Swarm Simulator
 	
 	'' roslaunch swarm_simulator swarm.launch ''
 
-3. Run '' roslaunch singlerobot robotcontrol.launch '' to run this node.
- 
-	Use --screen to print the position of the current robot in x,y,z
+3. Generate the launch file for the singlerobot package for n-agents
+
+    '' roscd singlerobot ''
+    '' bash generator.sh <number of agents> ''
+
+4. Launch the singlerobot nodes.
+
+    '' roslaunch singlerobot singlerobot.launch ''  
+
+The messages are published at /swarmbot0/message and similarly for others.
 
 ======TODO:======
 
-1. Edit Roslaunch to deploy same code N times.
 
-2. Implement a naive path planner to take robot from Point A to Point B.
+1. Implement a naive path planner to take robot from Point A to Point B.
 
-3. Subscribe to encoder data for sibgle robot and generate path from that.
+2. Subscribe to encoder data for single robot and generate path from that.
