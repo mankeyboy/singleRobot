@@ -1,4 +1,7 @@
 <launch>
-	<node pkg ="singlerobot" type="singlerobot" name="swarmrobot" respawn="true"/>
-	
+    <arg name="botname"/>
+    <arg name="botID"/>
+    <param name="ID" value="$(arg botID)"/>
+    <param name="NAME" value="$(arg botname)"/>bot
+	<node pkg ="singlerobot" type="singlerobot" name="$(arg botname)" respawn="false"/>
 </launch>
