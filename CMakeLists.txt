@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -45,11 +46,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  pose.msg
+   message.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -66,10 +67,29 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
+
+## Generate services in the 'srv' folder
+# add_service_files(
+#   FILES
+#   Service1.srv
+#   Service2.srv
 # )
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   Action1.action
+#   Action2.action
+# )
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
+
+
 
 ###################################
 ## catkin specific configuration ##
@@ -83,7 +103,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES singlerobot
-  CATKIN_DEPENDS gazebo_ros roscpp rospy std_msgs
+  CATKIN_DEPENDS gazebo_ros roscpp rospy std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -108,7 +128,7 @@ add_executable(singlerobot src/singlerobot.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(singlerobot_node singlerobot_generate_messages_cpp)
+add_dependencies(singlerobot singlerobot_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(singlerobot ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
