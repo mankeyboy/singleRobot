@@ -49,7 +49,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   pose.msg
-   message.msg
+  message.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -113,9 +113,10 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
+## include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  include
 )
 
 ## Declare a cpp library
@@ -123,8 +124,13 @@ include_directories(
 #   src/${PROJECT_NAME}/singlerobot.cpp
 # )
 
+set(SHARED_SRC
+  include/leader_election.h
+  src/leader_election.cpp
+  )
+
 ## Declare a cpp executable
-add_executable(singlerobot src/singlerobot.cpp)
+add_executable(singlerobot src/singlerobot.cpp ${SHARED_SRC})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

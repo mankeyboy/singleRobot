@@ -11,6 +11,7 @@
 #include "singlerobot/message.h"
 #include "singlerobot/pose.h"
 #include "rosgraph_msgs/Clock.h"
+#include "leader_election.h"
 #include <string>
 
 using namespace std;
@@ -21,9 +22,15 @@ class swarmRobot
 {
   public:
     int id;
+    int n_agents;
+    int leader_id;
+    int is_leader;
     swarmRobot(): posX(0.0),posY(0.0),posZ(0.0)
     {
     	n.getParam("ID",id);
+      n.getParam("Agents",n_agents);
+      leader_id = id;
+      is_leader = 0;
     	// n.getParam("NAME",botName);
     	odomTopic << "/swarmbot" << id << "/odom";
     	messageTopic << "/swarmbot" << id << "/message";
@@ -43,13 +50,14 @@ class swarmRobot
     }
     void messageFiller(){
        msg.id = id;
+       msg.leader_id = leader_id;
        msg.stamp = clockTime.clock;
        singlerobot::pose temp;
        temp.x = posX;
        temp.y = posY;
        temp.theta = posZ;
        temp.id = id;
-       msg.table.push_back(temp);
+       // msg.table.push_back(temp);
     }
     void printPositions(void)
     {
@@ -61,6 +69,12 @@ class swarmRobot
        messageFiller();
        messagePub.publish(msg);
        std::cout << "Publishing" << std::endl;
+       LeaderElection lead_elec(id,n_agents);
+       if(is_leader < 20){
+          leader_id = lead_elec.ElectionByID();
+          // ROS_INFO("Leader ID for bot [%d] : [%d]", bot.id, bot.leader_id);
+          is_leader++ ;
+      }
        ros::spinOnce();
        loop_rate.sleep();
 
@@ -84,7 +98,13 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "singlerobot");
   swarmRobot bot;
-  while(ros::ok())
+  while(ros::ok()){
       bot.run();  
+      // if(bot.is_leader < 20){
+      //     bot.leader_id = lead_elec.ElectionByID();
+      //     ROS_INFO("Leader ID for bot [%d] : [%d]", bot.id, bot.leader_id);
+      //     bot.is_leader++ ;
+      // }
+    }
   return 0;
 }
