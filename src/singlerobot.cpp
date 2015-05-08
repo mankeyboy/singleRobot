@@ -34,7 +34,7 @@ public:
 	swarmRobot()
 	{
 		n.getParam("ID",id);
-        // id = 0;
+         //id = 2;
     	n.getParam("NAME",botName);
 		odomTopic << "/swarmbot" << id << "/odom";
 		velTopic << "/swarmbot" << id << "/cmd_vel";
@@ -191,12 +191,12 @@ public:
                 obstacles_updated = false;
             }
 
-            if(current_pos.position.x > waypoint.position.x - TOL &&
+            //reached waypoint
+                if (!path.empty()) { //next waypoint available
+			if(current_pos.position.x > waypoint.position.x - TOL &&
                current_pos.position.x < waypoint.position.x + TOL &&
                current_pos.position.y > waypoint.position.y - TOL &&
-    	       current_pos.position.y < waypoint.position.y + TOL) { //reached waypoint
-                if (!path.empty()) { //next waypoint available
-
+    	       current_pos.position.y < waypoint.position.y + TOL) { 
                     path.pop_back();
                     Point target = path.back();
                     waypoint.position.x = (target.first / SCALE) - (X_MAX / 2);
@@ -209,6 +209,7 @@ public:
                     //   waypoint.orientation.w = cos(angle/2);
                     // }
                 }
+                }
                 else //reached destination
                 {
                     std::cout << "Path empty" << std::endl;
@@ -217,7 +218,7 @@ public:
                     velPub.publish(cmd_vel);
                     break;
                 }
-            }
+            
             calculate_u_omega(current_pos, waypoint, cmd_vel);
             velPub.publish(cmd_vel);
 
