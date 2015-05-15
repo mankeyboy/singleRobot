@@ -47,7 +47,5 @@ The messages are published at /swarmbot0/message and similarly for others.
 4. Publish voronoi points
 	$ rosrun coverage voronoi_main 4
 5. Launch singlerobot nodes
-	$ roslaunch singlerobot.launch
-	
-	$ ros
+	$ roslaunch singlerobot singlerobot.launch
 
