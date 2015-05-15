@@ -34,3 +34,20 @@ The messages are published at /swarmbot0/message and similarly for others.
 1. Implement a naive path planner to take robot from Point A to Point B.
 
 2. Subscribe to encoder data for single robot and generate path from that.
+
+
+
+
+=========
+1. Ensure swarm_simulator and coverage reposiories are updated
+2. Launch gazebo :
+	$ roslaunch swarm_simulator swarm.launch
+3. Start publishing obstacle list
+	$ rosrun swarm_simulator swarm_simulator_node
+4. Publish voronoi points
+	$ rosrun coverage voronoi_main 4
+5. Launch singlerobot nodes
+	$ roslaunch singlerobot.launch
+	
+	$ ros
+
