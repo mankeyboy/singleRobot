@@ -33,13 +33,18 @@ The messages are published at /swarmbot0/message and similarly for others.
 1. Subscribe to encoder data for single robot and generate path from that.
 
 =========:Usage for First End to End:==============
+
 1. Ensure swarm_simulator and coverage repositories are updated
+
 2. Launch gazebo :
 	$ roslaunch swarm_simulator swarm.launch
+
 3. Start publishing obstacle list
 	$ rosrun swarm_simulator swarm_simulator_node
+
 4. Publish voronoi points
 	$ rosrun coverage voronoi_main 4
+
 5. Launch singlerobot nodes
 	$ roslaunch singlerobot singlerobot.launch
 
