@@ -26,11 +26,55 @@ const int SCALE = 1; // Each cell of map[][] covers 1/SCALE on simulator
 // hence higher the scale, more refined the path generated.
 const double TOL = 1 / double(SCALE);
 
-
-class swarmRobot
+class sharp
 {
-public:
-	int id;
+    protected:
+
+    int rssi; 
+    bool mode;//0 for sonar; 1 for r-theta
+    
+    public:
+
+    sharp():mode(false)
+    {}
+    sharp r_theta()
+    {
+        mode = true;
+    }
+};
+
+class swarmRobot: public sharp 
+{
+    protected:
+    
+    singlerobot::message msg;
+    ros::Subscriber odomSub;
+    ros::Subscriber clockSub;
+    ros::Publisher messagePub;
+    rosgraph_msgs::Clock clockTime;
+    ros::NodeHandle n;
+    std::string botName;
+    //double posX,posY,posZ;
+    std::stringstream messageTopic, odomTopic;
+
+    int **map;
+    std::stringstream velTopic;
+    ros::Publisher velPub;
+    ros::Subscriber coverageSub, obstacleSub;
+
+    Pose current_pos;
+    Pose destination_pos;
+    bool obstacles_updated;
+    bool obstacles_set;
+    bool pos_set;
+    bool destination_set;
+
+    sharp sensor_read;
+    std::vector<Pose> table;
+    
+    public:
+	
+    int id;
 	swarmRobot()
 	{
 		n.getParam("ID",id);
@@ -70,6 +114,30 @@ public:
         }
         free(map);
     }
+
+    void sharp_read()//sonar mode
+    {}
+
+    void sharp_read(swarmRobot receiver)//r-theta mode
+    {}
+
+    void Env_profile()//Build a map using SHARP as sonar like method sensor
+    {}
+
+    Pose Encoder_val()
+    {
+        Pose del_pose;
+        return del_pose;//Return change in pose between last iteration and now
+    }
+
+    Pose R_theta(swarmRobot receiver)
+    {
+        Pose del_pose;
+        return del_pose;//Of closest bot wrt to own bot
+    }
+
+
+
 	void robotCallback(nav_msgs::Odometry msg)
 	{
         // std::cout << "robotCallback called" << std::endl;
@@ -130,7 +198,7 @@ public:
 		temp.y = current_pos.position.y;
 		temp.theta = theta(current_pos);
 		temp.id = id;
-		msg.table.push_back(temp);
+		msg.mypose = (temp);
 	}
 	void printPositions(void)
 	{
@@ -226,30 +294,6 @@ public:
             loop_rate.sleep();
         }
     }
-
-
-protected:
-	singlerobot::message msg;
-	ros::Subscriber odomSub;
-	ros::Subscriber clockSub;
-	ros::Publisher messagePub;
-	rosgraph_msgs::Clock clockTime;
-	ros::NodeHandle n;
-	std::string botName;
-	//double posX,posY,posZ;
-	std::stringstream messageTopic, odomTopic;
-
-	int **map;
-	std::stringstream velTopic;
-	ros::Publisher velPub;
-	ros::Subscriber coverageSub, obstacleSub;
-
-	Pose current_pos;
-	Pose destination_pos;
-	bool obstacles_updated;
-	bool obstacles_set;
-	bool pos_set;
-	bool destination_set;
 };
 
 int main(int argc, char **argv)
