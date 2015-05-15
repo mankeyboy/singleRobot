@@ -30,16 +30,10 @@ The messages are published at /swarmbot0/message and similarly for others.
 
 ======TODO:======
 
+1. Subscribe to encoder data for single robot and generate path from that.
 
-1. Implement a naive path planner to take robot from Point A to Point B.
-
-2. Subscribe to encoder data for single robot and generate path from that.
-
-
-
-
-=========
-1. Ensure swarm_simulator and coverage reposiories are updated
+=========:Usage for First End to End:==============
+1. Ensure swarm_simulator and coverage repositories are updated
 2. Launch gazebo :
 	$ roslaunch swarm_simulator swarm.launch
 3. Start publishing obstacle list
