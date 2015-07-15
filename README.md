@@ -17,7 +17,7 @@ $ roslaunch swarm_simulator swarm.launch ''
 
 ```sh
 roscd singlerobot
-bash generator.sh <number of agents>
+bash scripts/generator.sh <number of agents>
 ```
 
 4. Launch the singlerobot nodes.
